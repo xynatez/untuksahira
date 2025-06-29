@@ -28,6 +28,8 @@
     <style>
         body {
             font-family: 'Cormorant Garamond', serif;
+            /* === LATAR BELAKANG BARU: TEKSTUR KAIN LEMBUT === */
+            background-image: url('https://www.transparenttextures.com/patterns/fabric-of-squares.png');
             background-color: #fdfaf6;
             overflow-x: hidden;
             opacity: 0;
@@ -36,25 +38,26 @@
         .font-kristi { font-family: 'Kristi', cursive; }
         .font-playfair { font-family: 'Playfair Display', serif; }
 
-        /* --- HALAMAN COVER DENGAN LATAR BARU --- */
+        /* --- HALAMAN COVER DENGAN TEMA MEJA TULIS ROMANTIS --- */
         #cover-page {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1508615039623-a25605d2b022?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            /* === GAMBAR BARU: MEJA TULIS DENGAN SURAT & BUNGA === */
+            background: linear-gradient(rgba(40,20,10,0.3), rgba(40,20,10,0.3)), url('https://images.unsplash.com/photo-1521120413309-42e7e40561a6?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
             z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            color: white;
+            color: white; 
             flex-direction: column;
         }
         .cover-title {
-            font-size: 6rem;
+            font-size: 6.5rem;
             transform: translateY(20px);
             opacity: 0;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.6);
         }
         .cover-subtitle, .cover-credit, #enter-button {
             transform: translateY(20px);
@@ -62,40 +65,46 @@
         }
         #enter-button {
             border: 2px solid white;
-            padding: 12px 30px;
+            padding: 14px 35px;
             margin-top: 40px;
-            font-size: 1.1rem;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
             text-shadow: none;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
-        #enter-button:hover { background-color: white; color: black; }
+        #enter-button:hover { 
+            background-color: white; 
+            color: #4a4a4a; 
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255,255,255,0.7);
+        }
 
         /* --- HALAMAN UTAMA --- */
         #main-content {
             display: none;
         }
         
-        /* === DESAIN TIMELINE BARU DENGAN GAP === */
+        /* === DESAIN TIMELINE YANG DISEMPURNAKAN === */
         .timeline-container { position: relative; max-width: 1000px; margin: 0 auto; }
-        .timeline-container::after { content: ''; position: absolute; width: 3px; background-color: #e6c0c2; top: 0; bottom: 0; left: 50%; margin-left: -1.5px; z-index: -1; }
-        .timeline-item { padding: 10px 40px; position: relative; width: 50%; margin-bottom: 3rem; /* Menambahkan gap antar box */ }
-        .timeline-item::after { content: ''; position: absolute; width: 20px; height: 20px; right: -11.5px; background-color: #fdfaf6; border: 4px solid #e6c0c2; top: 25px; border-radius: 50%; z-index: 1; transition: transform 0.4s ease, box-shadow 0.4s ease; }
+        .timeline-container::after { content: ''; position: absolute; width: 3px; background: linear-gradient(to bottom, #e6c0c2, #b3e2d3); top: 0; bottom: 0; left: 50%; margin-left: -1.5px; z-index: -1; animation: drawLine 4s ease-out forwards; }
+        @keyframes drawLine { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; margin-bottom: 3.5rem; }
+        .timeline-item::after { content: ''; position: absolute; width: 22px; height: 22px; right: -12px; background-color: #fdfaf6; border: 4px solid #e6c0c2; top: 25px; border-radius: 50%; z-index: 1; transition: transform 0.4s ease, box-shadow 0.4s ease; }
         .timeline-item:hover::after { transform: scale(1.3); box-shadow: 0 0 15px rgba(230, 192, 194, 0.7); }
         .timeline-item.left { left: 0; }
         .timeline-item.right { left: 50%; }
-        .timeline-item.right::after { left: -8.5px; }
-        .timeline-content { background-color: #ffffff; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.4s ease; display: flex; padding: 24px; align-items: flex-start; gap: 20px; }
-        .timeline-content:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
-        .timeline-icon { flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; font-size: 24px; }
-        .icon-teal { background-color: #e0f2f1; color: #00796b; }
-        .icon-rose { background-color: #fce4ec; color: #c2185b; }
-
-        /* === GALERI FOTO DENGAN EFEK MENGETIK === */
+        .timeline-item.right::after { left: -9.5px; }
+        .timeline-content { background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); display: flex; padding: 24px; align-items: flex-start; gap: 20px; }
+        .timeline-content:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 25px 55px rgba(0,0,0,0.1); }
+        .timeline-icon { flex-shrink: 0; width: 55px; height: 55px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        
+        /* === GALERI FOTO YANG LEBIH HIDUP === */
         .gallery-item { text-align: center; }
-        .gallery-img-wrapper { border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 1rem; }
-        .gallery-img { transition: transform 0.5s ease; }
+        .gallery-img-wrapper { border-radius: 16px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.08); margin-bottom: 1rem; }
+        .gallery-img { transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .gallery-img-wrapper:hover .gallery-img { transform: scale(1.1); }
-        .caption-text { font-weight: 600; min-height: 1.5rem; /* Memberi ruang agar tidak loncat saat teks muncul */ }
+        .caption-text { font-weight: 600; min-height: 1.5rem; }
         
         @media screen and (max-width: 768px) {
             .cover-title { font-size: 4rem; }
@@ -129,7 +138,7 @@
             </header>
 
             <main>
-                <section class="bg-white/30 backdrop-filter-blur p-8 rounded-2xl shadow-lg mb-20">
+                <section class="bg-white/50 backdrop-filter-blur p-8 rounded-2xl shadow-lg mb-20">
                     <p class="text-center leading-relaxed text-lg tracking-wider">
                         Aku nggak akan bilang kalau salah satu pilihan itu lebih baik dari yang lain. Karena UGM dan UI, keduanya adalah tempat yang luar biasa. Dan kamu, bisa berada di titik ini, adalah bukti betapa hebatnya kamu. Aku bangga, lebih dari yang bisa kuucapkan.
                     </p>
@@ -141,29 +150,16 @@
                 <section class="my-24" id="gallery-section">
                     <h2 class="font-kristi text-7xl md:text-8xl text-rose-400 text-center mb-12">Kepingan Cerita Kita</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
-                        <div class="gallery-item">
-                            <div class="gallery-img-wrapper"><img src="./sebastiansahira.webp" alt="Sebastian & Sahira" class="gallery-img w-full h-full object-cover"></div>
-                            <p class="caption-text" id="caption1"></p>
-                        </div>
-                        <div class="gallery-item">
-                            <div class="gallery-img-wrapper"><img src="./erenssahira.webp" alt="Erens & Sahira" class="gallery-img w-full h-full object-cover"></div>
-                            <p class="caption-text" id="caption2"></p>
-                        </div>
-                        <div class="gallery-item">
-                            <div class="gallery-img-wrapper"><img src="./nathanielsahira.webp" alt="Nathaniel & Sahira" class="gallery-img w-full h-full object-cover"></div>
-                            <p class="caption-text" id="caption3"></p>
-                        </div>
-                        <div class="gallery-item">
-                            <div class="gallery-img-wrapper"><img src="./maphilesahira.webp" alt="Maphile & Sahira" class="gallery-img w-full h-full object-cover"></div>
-                            <p class="caption-text" id="caption4"></p>
-                        </div>
+                        <div class="gallery-item"><div class="gallery-img-wrapper"><img src="./sebastiansahira.webp" alt="Sebastian & Sahira" class="gallery-img w-full h-full object-cover"></div><p class="caption-text" id="caption1"></p></div>
+                        <div class="gallery-item"><div class="gallery-img-wrapper"><img src="./erenssahira.webp" alt="Erens & Sahira" class="gallery-img w-full h-full object-cover"></div><p class="caption-text" id="caption2"></p></div>
+                        <div class="gallery-item"><div class="gallery-img-wrapper"><img src="./nathanielsahira.webp" alt="Nathaniel & Sahira" class="gallery-img w-full h-full object-cover"></div><p class="caption-text" id="caption3"></p></div>
+                        <div class="gallery-item"><div class="gallery-img-wrapper"><img src="./maphilesahira.webp" alt="Maphile & Sahira" class="gallery-img w-full h-full object-cover"></div><p class="caption-text" id="caption4"></p></div>
                     </div>
                 </section>
 
                 <section class="my-24">
                     <h2 class="font-kristi text-7xl md:text-8xl text-rose-400 text-center mb-16">Andai Saja Kita di UI...</h2>
                     <div class="timeline-container">
-                        
                         <div class="timeline-item left"><div class="timeline-content"><div class="timeline-icon icon-teal"><i class="fas fa-seedling"></i></div><div><h3 class="font-playfair text-2xl font-bold text-teal-800">Berkembang Bareng</h3><p class="mt-2 text-md tracking-wider">Tumbuh dewasa, belajar hal baru, dan jadi versi terbaik dari diri kita, sambil saling genggam tangan.</p></div></div></div>
                         <div class="timeline-item right"><div class="timeline-content"><div class="timeline-icon icon-rose"><i class="fas fa-book-open-reader"></i></div><div><h3 class="font-playfair text-2xl font-bold text-rose-800">Belajar Bareng</h3><p class="mt-2 text-md tracking-wider">Saling jadi partner begadang di perpus, pusingin anatomi, sampai akhirnya kita sama-sama jadi dokter hebat.</p></div></div></div>
                         <div class="timeline-item left"><div class="timeline-content"><div class="timeline-icon icon-teal"><i class="fas fa-person-running"></i></div><div><h3 class="font-playfair text-2xl font-bold text-teal-800">Joging Bareng</h3><p class="mt-2 text-md tracking-wider">Menyapa mentari pagi di danau UI, memulai hari dengan sehat dan tawa. Energi terbaik sebelum kelas.</p></div></div></div>
@@ -176,7 +172,6 @@
                     </div>
                 </section>
 
-                <!-- === BAGIAN BARU YANG DIMINTA === -->
                 <section class="my-24 text-center">
                     <h2 class="font-kristi text-6xl text-gray-500 mb-6">Tetapi...</h2>
                     <div class="max-w-2xl mx-auto bg-white/50 backdrop-filter-blur p-8 rounded-2xl shadow-lg">
@@ -209,7 +204,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            gsap.registerPlugin(ScrollTrigger, TextPlugin); // Daftarkan TextPlugin
+            gsap.registerPlugin(ScrollTrigger, TextPlugin); 
 
             const coverPage = document.getElementById('cover-page');
             const mainContent = document.getElementById('main-content');
@@ -218,10 +213,10 @@
             // --- ANIMASI COVER MASUK ---
             const tlCover = gsap.timeline();
             tlCover.to("body", { duration: 0.1, opacity: 1 })
-                .to(".cover-title", { duration: 1.5, y: 0, opacity: 1, ease: "power3.out" }, "-=0.2")
-                .to(".cover-subtitle", { duration: 1.2, y: 0, opacity: 1, ease: "power3.out" }, "-=1.2")
-                .to("#enter-button", { duration: 1.2, y: 0, opacity: 1, ease: "power3.out" }, "-=1.0")
-                .to(".cover-credit", { duration: 1.2, y: 0, opacity: 1, ease: "power3.out" }, "-=1.0");
+                .to(".cover-title", { duration: 1.5, y: 0, opacity: 1, ease: "power4.out" }, "-=0.2")
+                .to(".cover-subtitle", { duration: 1.2, y: 0, opacity: 1, ease: "power4.out" }, "-=1.2")
+                .to("#enter-button", { duration: 1.2, y: 0, opacity: 1, ease: "power4.out" }, "-=1.0")
+                .to(".cover-credit", { duration: 1.2, y: 0, opacity: 1, ease: "power4.out" }, "-=1.0");
 
             // --- FUNGSI MASUK KE KONTEN UTAMA ---
             enterButton.addEventListener('click', () => {
@@ -233,8 +228,8 @@
                         coverPage.style.display = 'none';
                         mainContent.style.display = 'block';
                         document.body.style.overflowY = 'auto';
-                        animateMainContent(); // Jalankan animasi utama
-                        animateGalleryText(); // Jalankan animasi teks galeri
+                        animateMainContent(); 
+                        animateGalleryText();
                     }
                 });
             });
@@ -245,8 +240,16 @@
                 sections.forEach(section => {
                     gsap.from(section, {
                         scrollTrigger: { trigger: section, start: "top 85%", toggleActions: "play none none none" },
-                        opacity: 0, y: 50, duration: 1.2, ease: "power3.out"
+                        opacity: 0, y: 60, duration: 1.5, ease: "power4.out"
                     });
+                });
+                // Animasi khusus untuk garis timeline
+                gsap.from(".timeline-container::after", {
+                    scrollTrigger: { trigger: ".timeline-container", start: "top 70%" },
+                    scaleY: 0,
+                    duration: 4,
+                    ease: "power2.out",
+                    transformOrigin: "top"
                 });
             }
 
