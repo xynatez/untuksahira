@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebuah Surat untuk Sahira</title>
+    
+    <!-- GSAP (GreenSock Animation Platform) untuk animasi kompleks -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Tambahan GSAP TextPlugin untuk efek mengetik -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cormorant+Garamond:wght@300;400;600&family=Kristi&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tone.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: #fdfaf6;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .font-kristi { font-family: 'Kristi', cursive; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* --- HALAMAN COVER DENGAN LATAR BARU --- */
+        #cover-page {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1508615039623-a25605d2b022?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            flex-direction: column;
+        }
+        .cover-title {
+            font-size: 6rem;
+            transform: translateY(20px);
+            opacity: 0;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+        .cover-subtitle, .cover-credit, #enter-button {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        #enter-button {
+            border: 2px solid white;
+            padding: 12px 30px;
+            margin-top: 40px;
+            font-size: 1.1rem;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            text-shadow: none;
+        }
+        #enter-button:hover { background-color: white; color: black; }
+
+        /* --- HALAMAN UTAMA --- */
+        #main-content {
+            display: none;
+        }
+        
+        /* === DESAIN TIMELINE BARU DENGAN GAP === */
+        .timeline-container { position: relative; max-width: 1000px; margin: 0 auto; }
+        .timeline-container::after { content: ''; position: absolute; width: 3px; background-color: #e6c0c2; top: 0; bottom: 0; left: 50%; margin-left: -1.5px; z-index: -1; }
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; margin-bottom: 3rem; /* Menambahkan gap antar box */ }
+        .timeline-item::after { content: ''; position: absolute; width: 20px; height: 20px; right: -11.5px; background-color: #fdfaf6; border: 4px solid #e6c0c2; top: 25px; border-radius: 50%; z-index: 1; transition: transform 0.4s ease, box-shadow 0.4s ease; }
+        .timeline-item:hover::after { transform: scale(1.3); box-shadow: 0 0 15px rgba(230, 192, 194, 0.7); }
+        .timeline-item.left { left: 0; }
+        .timeline-item.right { left: 50%; }
+        .timeline-item.right::after { left: -8.5px; }
+        .timeline-content { background-color: #ffffff; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.4s ease; display: flex; padding: 24px; align-items: flex-start; gap: 20px; }
+        .timeline-content:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
+        .timeline-icon { flex-shrink: 0; width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; font-size: 24px; }
+        .icon-teal { background-color: #e0f2f1; color: #00796b; }
+        .icon-rose { background-color: #fce4ec; color: #c2185b; }
+
+        /* === GALERI FOTO DENGAN EFEK MENGETIK === */
+        .gallery-item { text-align: center; }
+        .gallery-img-wrapper { border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+        .gallery-img { transition: transform 0.5s ease; }
+        .gallery-img-wrapper:hover .gallery-img { transform: scale(1.1); }
+        .caption-text { font-weight: 600; min-height: 1.5rem; /* Memberi ruang agar tidak loncat saat teks muncul */ }
+        
+        @media screen and (max-width: 768px) {
+            .cover-title { font-size: 4rem; }
+            .timeline-container::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item.left, .timeline-item.right { left: 0; }
+            .timeline-item.left::after, .timeline-item.right::after { left: 22px; }
+            .gallery-item { margin-bottom: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======================= HALAMAN COVER ======================= -->
+    <div id="cover-page">
+        <div>
+            <h1 class="font-kristi cover-title">Untuk Sahira</h1>
+            <p class="font-playfair text-2xl mt-4 cover-subtitle">Sebuah surat, untuk masa depan kita.</p>
+            <button id="enter-button" class="font-playfair rounded-full">Buka Surat Ini</button>
+            <p class="text-sm mt-16 cover-credit">Crafted with ♡ by Alwin</p>
+        </div>
+    </div>
+
+    <!-- ======================= HALAMAN UTAMA (SURAT) ======================= -->
+    <div id="main-content" class="content-wrapper">
+        <div class="container mx-auto max-w-4xl p-5 md:p-10">
+            
+            <header class="text-center my-16">
+                 <p class="text-lg tracking-wider">Hai, sayang...</p>
+                 <h1 class="font-playfair text-3xl md:text-4xl mt-4 font-bold text-teal-800">Aku Tahu Kamu Sedang Memilih, <br class="hidden md:block"> dan Aku Ingin Kamu Tahu Sesuatu...</h1>
+            </header>
+
+            <main>
+                <section class="bg-white/30 backdrop-filter-blur p-8 rounded-2xl shadow-lg mb-20">
+                    <p class="text-center leading-relaxed text-lg tracking-wider">
+                        Aku nggak akan bilang kalau salah satu pilihan itu lebih baik dari yang lain. Karena UGM dan UI, keduanya adalah tempat yang luar biasa. Dan kamu, bisa berada di titik ini, adalah bukti betapa hebatnya kamu. Aku bangga, lebih dari yang bisa kuucapkan.
+                    </p>
+                    <p class="text-center leading-relaxed mt-4 text-lg tracking-wider">
+                        Tapi, surat ini bukan tentang membandingkan universitas. Ini tentang sebuah kemungkinan. Sebuah skenario di mana jalan kita tidak hanya bersimpangan, tapi menyatu. Di mana kata "aku" dan "kamu" melebur menjadi "kita", lebih awal dari yang kita duga.
+                    </p>
+                </section>
+                
+                <section class="my-24" id="gallery-section">
+                    <h2 class="font-kristi text-7xl md:text-8xl text-rose-400 text-center mb-12">Kepingan Cerita Kita</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
+                        <div class="gallery-item">
+                            <div class="gallery-img-wrapper"><img src="./sebastiansahira.webp" alt="Sebastian & Sahira" class="gallery-img w-full h-full object-cover"></div>
+                            <p class="caption-text" id="caption1"></p>
+                        </div>
+                        <div class="gallery-item">
+                            <div class="gallery-img-wrapper"><img src="./erenssahira.webp" alt="Erens & Sahira" class="gallery-img w-full h-full object-cover"></div>
+                            <p class="caption-text" id="caption2"></p>
+                        </div>
+                        <div class="gallery-item">
+                            <div class="gallery-img-wrapper"><img src="./nathanielsahira.webp" alt="Nathaniel & Sahira" class="gallery-img w-full h-full object-cover"></div>
+                            <p class="caption-text" id="caption3"></p>
+                        </div>
+                        <div class="gallery-item">
+                            <div class="gallery-img-wrapper"><img src="./maphilesahira.webp" alt="Maphile & Sahira" class="gallery-img w-full h-full object-cover"></div>
+                            <p class="caption-text" id="caption4"></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="my-24">
+                    <h2 class="font-kristi text-7xl md:text-8xl text-rose-400 text-center mb-16">Andai Saja Kita di UI...</h2>
+                    <div class="timeline-container">
+                        
+                        <div class="timeline-item left"><div class="timeline-content"><div class="timeline-icon icon-teal"><i class="fas fa-seedling"></i></div><div><h3 class="font-playfair text-2xl font-bold text-teal-800">Berkembang Bareng</h3><p class="mt-2 text-md tracking-wider">Tumbuh dewasa, belajar hal baru, dan jadi versi terbaik dari diri kita, sambil saling genggam tangan.</p></div></div></div>
+                        <div class="timeline-item right"><div class="timeline-content"><div class="timeline-icon icon-rose"><i class="fas fa-book-open-reader"></i></div><div><h3 class="font-playfair text-2xl font-bold text-rose-800">Belajar Bareng</h3><p class="mt-2 text-md tracking-wider">Saling jadi partner begadang di perpus, pusingin anatomi, sampai akhirnya kita sama-sama jadi dokter hebat.</p></div></div></div>
+                        <div class="timeline-item left"><div class="timeline-content"><div class="timeline-icon icon-teal"><i class="fas fa-person-running"></i></div><div><h3 class="font-playfair text-2xl font-bold text-teal-800">Joging Bareng</h3><p class="mt-2 text-md tracking-wider">Menyapa mentari pagi di danau UI, memulai hari dengan sehat dan tawa. Energi terbaik sebelum kelas.</p></div></div></div>
+                        <div class="timeline-item right"><div class="timeline-content"><div class="timeline-icon icon-rose"><i class="fas fa-rocket"></i></div><div><h3 class="font-playfair text-2xl font-bold text-rose-800">Bikin Startup Bareng</h3><p class="mt-2 text-md tracking-wider">Siapa tahu obrolan ngasal kita di warkop bisa jadi startup kesehatan yang mengubah dunia? Bersamamu, semua mungkin.</p></div></div></div>
+                        <div class="timeline-item left"><div class="timeline-content"><div class="timeline-icon icon-teal"><i class="fas fa-mug-hot"></i></div><div><h3 class="font-playfair text-2xl font-bold text-teal-800">Ngopi Bareng</h3><p class="mt-2 text-md tracking-wider">Melepas penat setelah seharian kuliah dengan secangkir kopi, merencanakan akhir pekan kita yang seru.</p></div></div></div>
+                        <div class="timeline-item right"><div class="timeline-content"><div class="timeline-icon icon-rose"><i class="fas fa-hand-holding-heart"></i></div><div><h3 class="font-playfair text-2xl font-bold text-rose-800">Date Bareng</h3><p class="mt-2 text-md tracking-wider">Nonton di Margo City, atau sekadar makan malam di kantin. Setiap momen adalah kencan istimewa karena ada kamu.</p></div></div></div>
+                        <div class="timeline-item left"><div class="timeline-content"><div class="timeline-icon icon-teal"><i class="fas fa-water"></i></div><div><h3 class="font-playfair text-2xl font-bold text-teal-800">Duduk di Danau Bareng</h3><p class="mt-2 text-md tracking-wider">Menikmati senja di tepi danau, berbagi cerita, atau hanya diam sambil menikmati kebersamaan kita. Damai.</p></div></div></div>
+                        <div class="timeline-item right"><div class="timeline-content"><div class="timeline-icon icon-rose"><i class="fas fa-shoe-prints"></i></div><div><h3 class="font-playfair text-2xl font-bold text-rose-800">Jalan-jalan Bareng</h3><p class="mt-2 text-md tracking-wider">Menjelajahi setiap sudut Jakarta di akhir pekan, menciptakan petualangan dan kenangan baru hanya berdua.</p></div></div></div>
+                        <div class="timeline-item left"><div class="timeline-content"><div class="timeline-icon icon-teal"><i class="fas fa-infinity"></i></div><div><h3 class="font-playfair text-2xl font-bold text-teal-800">Tiap Hari Bareng</h3><p class="mt-2 text-md tracking-wider">Ini yang terpenting. Tidak ada lagi LDR, tidak ada lagi rindu. Hanya ada kita, setiap hari, memulai dan mengakhiri hari bersama.</p></div></div></div>
+                    </div>
+                </section>
+
+                <!-- === BAGIAN BARU YANG DIMINTA === -->
+                <section class="my-24 text-center">
+                    <h2 class="font-kristi text-6xl text-gray-500 mb-6">Tetapi...</h2>
+                    <div class="max-w-2xl mx-auto bg-white/50 backdrop-filter-blur p-8 rounded-2xl shadow-lg">
+                        <p class="text-lg leading-relaxed tracking-wider text-gray-700">
+                            Tentu, Jogja itu istimewa, dan aku tahu kamu akan bersinar terang di sana. Aku akan tetap menjadi pendukung nomor satumu, dari kejauhan.
+                        </p>
+                        <p class="mt-4 text-lg leading-relaxed tracking-wider text-gray-700">
+                            Tapi jika kamu memilih jalan itu, semua mimpi yang baru saja kita rangkai di atas akan tetap menjadi angan-angan. Sebuah skenario indah yang tidak pernah tertulis. Dan jarak, akan kembali menjadi pengingat tentang semua momen 'hampir' yang tidak akan pernah kita miliki bersama.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="bg-gradient-to-br from-rose-100 to-teal-100 p-10 rounded-2xl shadow-xl mt-12 text-center">
+                    <h2 class="font-playfair text-3xl md:text-4xl mb-4 text-gray-800">Apapun yang Kamu Pilih Nanti, Aku Akan Selalu Mendukungmu</h2>
+                    <p class="text-lg md:text-xl font-light max-w-2xl mx-auto mb-8 text-gray-700">
+                       Sahira sayang, surat ini bukan untuk membebanimu. Ini hanyalah sebuah jendela ke dalam hatiku. Sebuah harapan. Pilihan akhir ada di tanganmu, dan aku akan mendukungnya sepenuh hati. Tapi kalau kamu bertanya di mana hatiku berharap kamu berada... jawabannya ada di sini, bersamaku, di <strong class="font-semibold">Universitas Indonesia</strong>.
+                    </p>
+                </section>
+            </main>
+            
+            <footer class="text-center mt-20 pb-16">
+                <p class="font-kristi text-6xl text-rose-400">Alwin</p>
+                <p class="font-playfair tracking-widest text-lg text-gray-600 mt-1 uppercase">With all my love</p>
+            </footer>
+
+        </div>
+    </div>
+    
+    <button id="music-toggle" title="Putar Musik" class="fixed bottom-5 right-5 z-50 bg-rose-300 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110"><i class="fas fa-play"></i></button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger, TextPlugin); // Daftarkan TextPlugin
+
+            const coverPage = document.getElementById('cover-page');
+            const mainContent = document.getElementById('main-content');
+            const enterButton = document.getElementById('enter-button');
+
+            // --- ANIMASI COVER MASUK ---
+            const tlCover = gsap.timeline();
+            tlCover.to("body", { duration: 0.1, opacity: 1 })
+                .to(".cover-title", { duration: 1.5, y: 0, opacity: 1, ease: "power3.out" }, "-=0.2")
+                .to(".cover-subtitle", { duration: 1.2, y: 0, opacity: 1, ease: "power3.out" }, "-=1.2")
+                .to("#enter-button", { duration: 1.2, y: 0, opacity: 1, ease: "power3.out" }, "-=1.0")
+                .to(".cover-credit", { duration: 1.2, y: 0, opacity: 1, ease: "power3.out" }, "-=1.0");
+
+            // --- FUNGSI MASUK KE KONTEN UTAMA ---
+            enterButton.addEventListener('click', () => {
+                gsap.to(coverPage, { 
+                    duration: 1.2, 
+                    opacity: 0, 
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        coverPage.style.display = 'none';
+                        mainContent.style.display = 'block';
+                        document.body.style.overflowY = 'auto';
+                        animateMainContent(); // Jalankan animasi utama
+                        animateGalleryText(); // Jalankan animasi teks galeri
+                    }
+                });
+            });
+
+            // --- FUNGSI ANIMASI KONTEN UTAMA SAAT SCROLL ---
+            function animateMainContent() {
+                const sections = gsap.utils.toArray('section, header, footer, .timeline-item');
+                sections.forEach(section => {
+                    gsap.from(section, {
+                        scrollTrigger: { trigger: section, start: "top 85%", toggleActions: "play none none none" },
+                        opacity: 0, y: 50, duration: 1.2, ease: "power3.out"
+                    });
+                });
+            }
+
+            // --- FUNGSI BARU UNTUK EFEK MENGETIK DI GALERI ---
+            function animateGalleryText() {
+                const galleryTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#gallery-section",
+                        start: "top 70%",
+                        toggleActions: "play none none none"
+                    }
+                });
+                
+                galleryTl.to("#caption1", { duration: 1.5, text: "Sebastian & Sahira", ease: "none" })
+                         .to("#caption2", { duration: 1.5, text: "Erens & Sahira", ease: "none" }, "-=1.0")
+                         .to("#caption3", { duration: 1.5, text: "Nathaniel & Sahira", ease: "none" }, "-=1.0")
+                         .to("#caption4", { duration: 1.5, text: "Maphile & Sahira", ease: "none" }, "-=1.0");
+            }
+
+
+            // --- KONTROL MUSIK ---
+            const musicToggle = document.getElementById('music-toggle');
+            let musicPlaying = false;
+            let synth, reverb;
+
+            function setupAudio() {
+                if(synth) return;
+                synth = new Tone.PolySynth(Tone.Synth, {oscillator: {type:"sine"},envelope:{attack:0.1,decay:0.2,sustain:0.5,release:1},volume:-12}).toDestination();
+                reverb = new Tone.Reverb({decay:5,wet:0.5}).toDestination();
+                synth.connect(reverb);
+                const notes=["C4","G4","E4","A4", "F4", "C5", "G4", "B4"];
+                let noteIndex = 0;
+                new Tone.Loop(time => {
+                    synth.triggerAttackRelease(notes[noteIndex++ % notes.length], "1n", time);
+                }, "1m").start(0);
+            }
+            
+            musicToggle.addEventListener('click', async () => {
+                await Tone.start();
+                if (!musicPlaying) {
+                    setupAudio();
+                    Tone.Transport.start();
+                    musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+                    musicPlaying = true;
+                } else {
+                    Tone.Transport.pause();
+                    musicToggle.innerHTML = '<i class="fas fa-play"></i>';
+                    musicPlaying = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
